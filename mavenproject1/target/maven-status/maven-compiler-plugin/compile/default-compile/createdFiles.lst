@@ -1,0 +1,11 @@
+se/kth/iv1350/pointOfSale/integration/ItemDTO.class
+se/kth/iv1350/pointOfSale/model/Item.class
+se/kth/iv1350/pointOfSale/view/View.class
+se/kth/iv1350/pointOfSale/model/ReceiptDTO.class
+se/kth/iv1350/pointOfSale/model/CheckOutCart.class
+se/kth/iv1350/pointOfSale/model/Sale.class
+se/kth/iv1350/pointOfSale/integration/InventoryHandler.class
+se/kth/iv1350/pointOfSale/integration/DiscountRegister.class
+se/kth/iv1350/pointOfSale/startup/Main.class
+se/kth/iv1350/pointOfSale/integration/SalesLog.class
+se/kth/iv1350/pointOfSale/integration/AccountingHandler.class
