@@ -11,8 +11,10 @@ import se.kth.iv1350.pointOfSale.model.SaleStateDTO;
  */
 public class InventoryHandler {
     
-private final int lengthOfFakeItemList = 6;
+    private final int lengthOfFakeItemList = 6;
     private final ItemDTO[] fakeItemList = new ItemDTO[lengthOfFakeItemList]; 
+    
+    
     /**
      * Creates an instance of the <code>InventoryHandler</code>.
      */
@@ -30,15 +32,25 @@ private final int lengthOfFakeItemList = 6;
         * 
         * @param itemRequest An <code>ItemDTO</code> with an identifier number that verifies the scanned item.
         * @return scannedItem An <code>ItemDTO</code> that contains all the stored information about the scanned item. 
+        * @throws ItemNotFoundException Thrown when an <code>ItemDTO</code> identifier does not match an identifier in the inventory database.
+        * @throws CouldNotReachDatabaseException Thrown when the inventory database could not be reached.
         */     
-	public ItemDTO createItemDTO(ItemDTO itemRequest) {
+	public ItemDTO createItemDTO(ItemDTO itemRequest) throws ItemNotFoundException,CouldNotReachDatabaseException{
         int itemIdentifier = itemRequest.getIdentifier();
-        ItemDTO scannedItem;
-
-            if(itemIdentifier < 0 || itemIdentifier > 5)
-                 return scannedItem = null;
-            else
-                 return scannedItem = new ItemDTO(itemIdentifier, itemRequest.getQuantity(), fakeItemList[itemIdentifier].getName(), fakeItemList[itemIdentifier].getDescription(), fakeItemList[itemIdentifier].getPrice(), fakeItemList[itemIdentifier].getRateOfVAT());
+            
+            connectToInventoryDatabase(itemRequest);
+            
+            try {
+                 ItemDTO scannedItem = new ItemDTO(itemIdentifier, itemRequest.getQuantity(),
+                 fakeItemList[itemIdentifier].getName(), fakeItemList[itemIdentifier].getDescription(),
+                 fakeItemList[itemIdentifier].getPrice(),fakeItemList[itemIdentifier].getRateOfVAT());
+                
+                return scannedItem;
+                
+            } catch (ArrayIndexOutOfBoundsException e) {
+                throw new ItemNotFoundException(itemRequest);
+            }
+             
     }
 
      /**
@@ -48,6 +60,16 @@ private final int lengthOfFakeItemList = 6;
         
     public void sendInventoryInfo(SaleStateDTO saleState) {
         ArrayList<Item> listOfItemsBought = saleState.getListOfItems();
+    }
+    
+    
+    private void connectToInventoryDatabase(ItemDTO itemrequest) throws CouldNotReachDatabaseException{
+        int forbiddenIdentifier = 404;
+        
+        if(itemrequest.getIdentifier() == forbiddenIdentifier){
+            throw new CouldNotReachDatabaseException();
+        }
+        
     }
 
 }

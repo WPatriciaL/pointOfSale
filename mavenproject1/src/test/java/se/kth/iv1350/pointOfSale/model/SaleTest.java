@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Disabled;
 import se.kth.iv1350.pointOfSale.integration.ItemDTO;
 import se.kth.iv1350.pointOfSale.integration.InventoryHandler;
 import se.kth.iv1350.pointOfSale.integration.DiscountRegister;
+import se.kth.iv1350.pointOfSale.integration.ItemNotFoundException;
 
 
 
@@ -52,19 +53,23 @@ public class SaleTest {
     }
     
         /**
-     * Test of updateRunningTotal method, of class Sale. Tests if the shopping cart is correctly added to the SaleStateDTO.
+     * Test of updateRunningTotal method, of class Sale. Test if the shopping cart is correctly added to the SaleStateDTO.
      */
   
     @Test
     public void testUpdateRunningTotalReturnsAShoppingCart() {
         String expectedValue = "Chocolate";
-        checkOutCart.addItem(scannedItem);
         
-        SaleStateDTO saleState = sale.updateRunningTotal(scannedItem);
-        String actual = saleState.getListOfItems().get(0).getName();
-        assertEquals(expectedValue, actual, "The name of the items in the shopping cart do not match");
-        
-        
+        try {
+             checkOutCart.addItem(scannedItem);
+              
+        } catch (ItemNotFoundException e) {
+            
+        }
+              SaleStateDTO saleState = sale.updateRunningTotal(scannedItem);
+              String actual = saleState.getListOfItems().get(0).getName(); 
+              assertEquals(expectedValue, actual, "The name of the items in the shopping cart do not match");
+                   
     }
     
     /**

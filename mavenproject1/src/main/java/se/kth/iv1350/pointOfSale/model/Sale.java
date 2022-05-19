@@ -74,14 +74,6 @@ public class Sale {
             return calculatedVAT;
         }
         
-/*- ------- ------ -----
-	public void finalizeSaleInfo(double change, double paymentReceived) {
-            
-            
-          java.time.LocalDateTime dateAndTimeForSale = logDateAndTimeForSale();
-          
-            
-	}
         /**
          * Gets the date and time for the recently concluded <code>Sale</code>
          * @return current date and time

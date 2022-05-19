@@ -4,7 +4,9 @@ import se.kth.iv1350.pointOfSale.controller.Controller;
 import se.kth.iv1350.pointOfSale.integration.ItemDTO;
 import se.kth.iv1350.pointOfSale.model.ReceiptDTO;
 import se.kth.iv1350.pointOfSale.model.SaleStateDTO;
-import java.lang.*;
+import se.kth.iv1350.pointOfSale.controller.ConnectionException;
+import se.kth.iv1350.pointOfSale.controller.InvalidInputException;
+
 
 
 /**
@@ -27,50 +29,70 @@ public class View {
          * hardcoded execution with calls to all system operations in the <code>Controller</code>.
          */
         public void viewExecute(){
-            ItemDTO firstItemBought = new ItemDTO(5, 1, null, null, 0, 0);
-            ItemDTO secondItemBought = new ItemDTO(3, 1, null, null, 0, 0);
-            ItemDTO thirdItemBought = new ItemDTO(3, 1, null, null, 0, 0);
-            SaleStateDTO toBePrinted;
-            
+            ItemDTO firstItemBought = new ItemDTO(3, 1, null, null, 0, 0);
+            ItemDTO secondItemBought = new ItemDTO(4, 1, null, null, 0, 0);
+            ItemDTO forbiddenItemIdentifier = new ItemDTO(404, 1, null, null, 0, 0);
+            SaleStateDTO firstItemToPrint;
+            SaleStateDTO secondItemToPrint;
+            SaleStateDTO itemThatCausesAnException;
             ReceiptDTO receipt;
             double paymentReceived = 200;
+
             
             
             controller.startNewSale();
-            
-            toBePrinted = controller.nextItem(firstItemBought);
-            System.out.println("Lates scanned item: " + toBePrinted.getScannedITemDTO().getName());
-            System.out.println("Description: " + toBePrinted.getScannedITemDTO().getDescription());
-            System.out.println("Running total: " + toBePrinted.getRunningTotal());
-            System.out.println("Total VAT:" + toBePrinted.getTotalVAT());
-            System.out.println();
-       
-            toBePrinted = controller.nextItem(secondItemBought);
-           System.out.println("Lates scanned item: " + toBePrinted.getScannedITemDTO().getName());
-            System.out.println("Description: " + toBePrinted.getScannedITemDTO().getDescription());
-            System.out.println("Running total: " + toBePrinted.getRunningTotal());
-            System.out.println("Total VAT:" + toBePrinted.getTotalVAT());
-            System.out.println();
-            
-            toBePrinted = controller.nextItem(thirdItemBought);
-            System.out.println("Lates scanned item: " + toBePrinted.getScannedITemDTO().getName());
-            System.out.println("Description: " + toBePrinted.getScannedITemDTO().getDescription());
-            System.out.println("Running total: " + toBePrinted.getRunningTotal());
-            System.out.println("Total VAT:" + toBePrinted.getTotalVAT());
-            System.out.println();
-            
-            
-            receipt = controller.concludeSale(paymentReceived);
-            System.out.println("Time for sale: " + receipt.getTimeForSale());
-            System.out.println("Total price: " + receipt.getTotalPrice());
-            System.out.println("Discount: " + receipt.getDiscount());
-            System.out.println("Received Payment: " + receipt.getReceivedPayment());
-            System.out.println("Change: " + receipt.getChange());
-            
-           
-            
-          
+            try {
+                firstItemToPrint = controller.nextItem(firstItemBought);
+                printSaleInfoToScreen(firstItemToPrint);
+                secondItemToPrint = controller.nextItem(secondItemBought);
+                printSaleInfoToScreen(secondItemToPrint);
+                receipt = controller.concludeSale(paymentReceived);
+                printReceiptToScreen(receipt);     
+            } 
+            catch (InvalidInputException | ConnectionException e) {
+                String messageToScreen = e.getMessage();
+                printExceptionMessageToScreen(messageToScreen);
+                
+                //Throwable originalExceptionMessage = e.getCause();
+                //System.out.println(originalExceptionMessage);   
+            }
+               
+            controller.startNewSale();
+            try {
+                itemThatCausesAnException = controller.nextItem(forbiddenItemIdentifier);
+                printSaleInfoToScreen(itemThatCausesAnException);
+                receipt = controller.concludeSale(paymentReceived);
+                printReceiptToScreen(receipt);
+                
+            } 
+            catch (InvalidInputException | ConnectionException e) {
+                String messageToScreen = e.getMessage();
+                printExceptionMessageToScreen(messageToScreen);
+                
+                //Throwable originalExceptionMessage = e.getCause();
+                //System.out.println(originalExceptionMessage);
+           }
         }
         
         
+        private void printExceptionMessageToScreen (String messageToScreen){
+                System.out.println("\n \n|------------------- ERROR MESSAGE: --------------------------------|");
+                System.out.println(messageToScreen); 
+                System.out.println("|----------------- END OF ERROR MESSAGE ----------------------------|\n \n");
+        }
+        private void printSaleInfoToScreen (SaleStateDTO toBePrinted){
+        System.out.println("\n Lates scanned item: " + toBePrinted.getScannedITemDTO().getName() + 
+                "\n Description: " + toBePrinted.getScannedITemDTO().getDescription() + "\n Price: " + toBePrinted.getScannedITemDTO().getPrice() +
+                "\n Total VAT:" + toBePrinted.getTotalVAT() +"\n Running total: " + toBePrinted.getRunningTotal());
+        }
+        private void printReceiptToScreen (ReceiptDTO receipt){
+            System.out.println("""
+                           
+                           |- - - - - - - - - -  RECEIPT  - - - - - - - - - - - - - - - - - - -|
+                            Time for sale: """ + receipt.getTimeForSale() + "\n Total price: " +
+                            receipt.getTotalPrice() + "\n Discount: " + receipt.getDiscount() + 
+                            "\n Received Payment: " + receipt.getReceivedPayment() + "\n Change: " + receipt.getChange() + 
+                            "\n|- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -|");
+        }
+              
 }

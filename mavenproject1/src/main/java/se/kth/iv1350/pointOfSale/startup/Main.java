@@ -6,8 +6,11 @@ import se.kth.iv1350.pointOfSale.integration.SalesLog;
 import se.kth.iv1350.pointOfSale.integration.AccountingHandler;
 import se.kth.iv1350.pointOfSale.integration.InventoryHandler;
 import se.kth.iv1350.pointOfSale.integration.DiscountRegister;
+import se.kth.iv1350.pointOfSale.integration.TotalRevenueFileOutput;
+import se.kth.iv1350.pointOfSale.model.Register;
+import se.kth.iv1350.pointOfSale.view.TotalRevenueView;
 /**
- * Start the entire application, contains the <code>Main</code> method used to start the application.
+ * Start the entire application, containing the <code>Main</code> method used to start the application.
  * 
  */
 public class Main {
@@ -23,7 +26,13 @@ public class Main {
                 InventoryHandler inventoryHandler = new InventoryHandler();
                 SalesLog salesLog = new SalesLog(accountingHandler,inventoryHandler);
                 DiscountRegister discountRegister = new DiscountRegister();
-                Controller controller = new Controller(salesLog,inventoryHandler, discountRegister);
+                Register register = Register.getRegister();
+                TotalRevenueView totalRevenueView = new TotalRevenueView();
+                register.addRegisterObserver(totalRevenueView);
+                TotalRevenueFileOutput totalRevenueFileOutput = new TotalRevenueFileOutput();
+                register.addRegisterObserver(totalRevenueFileOutput);
+                
+                Controller controller = new Controller(salesLog,inventoryHandler, discountRegister,register);
                 View view = new View(controller);    
                 view.viewExecute();
 	}

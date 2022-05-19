@@ -1,15 +1,24 @@
 
 package se.kth.iv1350.pointOfSale.model;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
-import se.kth.iv1350.pointOfSale.integration.DiscountRegister;
-import se.kth.iv1350.pointOfSale.integration.InventoryHandler;
 
+
+
+
+class ObserverTester implements RegisterObserver{
+    
+    
+    @Override
+    public void notifyObserversBalanceHasChanged(double balance) {
+        System.out.println("works");
+    }
+}
 /**
  *
  * 
@@ -17,22 +26,21 @@ import se.kth.iv1350.pointOfSale.integration.InventoryHandler;
 public class RegisterTest {
     Register register;
     SaleStateDTO saleStateDTO;
-    
-    public RegisterTest() {
-    }
+    private final PrintStream originalOut = System.out;
+    private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
 
     @BeforeEach
     public void setUp() {
-       register = new Register();
+       register = Register.getRegister();
        saleStateDTO = new SaleStateDTO(null, 0, 50, null);
-        
-        
+       System.setOut(new PrintStream(outContent)); 
     }
     
     @AfterEach
     public void tearDown() {
         register = null;
         saleStateDTO = null;
+         System.setOut(originalOut);
     }
     
 
@@ -59,6 +67,22 @@ public class RegisterTest {
         double expResult = Double.MAX_VALUE - 20;
         assertEquals(expResult, actual, "The calculated change is incorrect");
     } 
-    
-    
-}
+
+ /**
+     * Test of addRegisterObserver method. Tests if a <code>RegisterObserver</code> actually is added to the list.
+     */
+    @Test
+    public void testIsAnObserverAdded (){
+
+        ObserverTester observerTester = new ObserverTester();
+        register.addRegisterObserver(observerTester);
+
+        testCalculateChange();
+
+        String output = outContent.toString();
+        boolean outputContainsBalance = output.contains("works");
+        assertTrue(outputContainsBalance, "The observer wasn't added to registerObserver");
+    }
+    }
+  
+

@@ -1,8 +1,10 @@
 package se.kth.iv1350.pointOfSale.model;
 
 import java.util.ArrayList;
+import se.kth.iv1350.pointOfSale.integration.CouldNotReachDatabaseException;
 import se.kth.iv1350.pointOfSale.integration.InventoryHandler;
 import se.kth.iv1350.pointOfSale.integration.ItemDTO;
+import se.kth.iv1350.pointOfSale.integration.ItemNotFoundException;
 
 /**
  * <code>Checkoutcart</code> contains the <code>Item</code>s in the current sale.
@@ -14,7 +16,7 @@ public class CheckOutCart {
         private ArrayList<Item> listOfItems;
         private boolean firstItemEver = true;
         private Item item;
-        private ItemDTO scannedItem;
+        
         
         
         
@@ -34,19 +36,19 @@ public class CheckOutCart {
         /**
          * Checks if the requested <code>Item</code> exists, and if so, adds the <code>Item</code> to the cart.
          * @param itemRequest a proto-item, all values null except for <code>identifier</code>.
-         * @return ItemDTO either is null, indicating no match in the database or contains all data of the requested <code>Item</code>.
+         * @return ItemDTO either is null, indicating no match in the database, or contains all data of the requested <code>Item</code>.
+         * @throws ItemNotFoundException Thrown when an <code>ItemDTO</code> identifier does not match an identifier in the inventory database.
+         * @throws CouldNotReachDatabaseException Thrown when the inventory database could not be reached.
          */
         
-	public ItemDTO addItem(ItemDTO itemRequest){
-            ItemDTO scannedItem = inventoryHandler.createItemDTO(itemRequest);
-            Item item;
-            if(scannedItem != null){
-                item = new Item(scannedItem);
-                addItemToCheckoutCart(item);
-            }
-           
-        
+	public ItemDTO addItem(ItemDTO itemRequest) throws  ItemNotFoundException, CouldNotReachDatabaseException{
             
+            ItemDTO scannedItem =inventoryHandler.createItemDTO(itemRequest);
+      
+            Item item = new Item(scannedItem);
+            
+                addItemToCheckoutCart(item);
+ 
             return scannedItem;
 	}
 
@@ -97,11 +99,12 @@ public class CheckOutCart {
             }
             return -1;
         }
+        
      /**
       * Get the <code>listOfItems</code> in the current cart.
       * @return the current shoppinglist
       */
-    protected final ArrayList<Item> getListOfItems() {
+    final ArrayList<Item> getListOfItems() {
         
         return listOfItems;
     }
