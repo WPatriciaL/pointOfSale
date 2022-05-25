@@ -5,7 +5,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 /**
- * Template superclass for objects that logs messages to files
+ * Template superclass for objects that logs messages to files.
  */
 public abstract class FileOutputter {
 

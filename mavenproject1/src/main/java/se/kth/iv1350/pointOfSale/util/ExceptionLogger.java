@@ -1,5 +1,7 @@
 package se.kth.iv1350.pointOfSale.util;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.time.LocalDateTime;
 
 
@@ -25,7 +27,9 @@ public class ExceptionLogger extends FileOutputter{
      */
     @Override
     protected String addMessage() {
-        return LocalDateTime.now().toString() + ": " + exception.getMessage() + " \n";
+            StringWriter stringWriter = new StringWriter();
+            exception.printStackTrace(new PrintWriter(stringWriter));
+            return "\n" + LocalDateTime.now().toString() + "\n" +  stringWriter.toString() + "\n" + "- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -";
     }
 
     /**

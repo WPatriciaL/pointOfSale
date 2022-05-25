@@ -11,7 +11,7 @@ public class ConnectionException extends RuntimeException{
      * @param originalException the original exception that was caught.
      */
     public ConnectionException(RuntimeException originalException){
-        super("ERROR: Something went wrong with the connection. Please try again. ",originalException);
+        super("ERROR: Something went wrong with the connection. Please try again.",originalException);
     
     }
     

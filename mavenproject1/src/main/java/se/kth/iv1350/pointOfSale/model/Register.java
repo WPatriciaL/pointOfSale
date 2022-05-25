@@ -11,7 +11,7 @@ public class Register {
 
     private double balance;
     private double change;
-    private ArrayList<RegisterObserver> registerObservers;
+    private final ArrayList<RegisterObserver> registerObservers;
     private static final Register INSTANCE_OF_REGISTER = new Register();
         
     /**

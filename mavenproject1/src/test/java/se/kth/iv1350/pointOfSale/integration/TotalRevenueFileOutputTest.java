@@ -62,7 +62,7 @@ public class TotalRevenueFileOutputTest {
                 Logger.getLogger(TotalRevenueFileOutputTest.class.getName()).log(Level.SEVERE, null, ex);
             }
             catch(IOException e){
-            e.printStackTrace();
+            
             }
             
            

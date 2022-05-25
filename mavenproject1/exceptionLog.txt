@@ -1,3 +1,11 @@
-2022-05-19T15:36:38.577227: The database can't be reached. 
-2022-05-19T16:23:13.571897: The database can't be reached. 
-2022-05-19T17:19:48.766580: The database can't be reached. 
+
+2022-05-25T16:11:47.248257
+se.kth.iv1350.pointOfSale.integration.CouldNotReachDatabaseException: The database can't be reached.
+	at se.kth.iv1350.pointOfSale.integration.InventoryHandler.connectToInventoryDatabase(InventoryHandler.java:70)
+	at se.kth.iv1350.pointOfSale.integration.InventoryHandler.createItemDTO(InventoryHandler.java:41)
+	at se.kth.iv1350.pointOfSale.model.CheckOutCart.addItem(CheckOutCart.java:46)
+	at se.kth.iv1350.pointOfSale.controller.Controller.nextItem(Controller.java:68)
+	at se.kth.iv1350.pointOfSale.view.View.viewExecute(View.java:74)
+	at se.kth.iv1350.pointOfSale.startup.Main.main(Main.java:37)
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

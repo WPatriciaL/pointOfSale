@@ -52,7 +52,7 @@ public class InventoryHandlerTest {
                 fail("Method did not return the expected exception.");
             } 
             catch (CouldNotReachDatabaseException couldNotReachDatabaseException) {
-                  couldNotReachDatabaseException.printStackTrace();
+                  
             }
             catch (Exception exception){
                 fail("Method throw the wrong exception.");
@@ -97,7 +97,7 @@ public class InventoryHandlerTest {
             ItemDTO receivedItemDTO = inventoryHandler.createItemDTO(fakeItemDTO);
             assertNotNull(receivedItemDTO, "Method did not return correct instances of object ");
         } catch (ItemNotFoundException e) {
-            e.printStackTrace();
+            
                    
         }
        
@@ -111,7 +111,7 @@ public class InventoryHandlerTest {
             double receivedRateOfVAT = receivedItemDTO.getRateOfVAT();
             assertTrue(receivedRateOfVAT == 0.25 ||receivedRateOfVAT == 0.12 ||receivedRateOfVAT == 0.06  ,"Method return invalid VAT-Rate");
         } catch (ItemNotFoundException e) {
-            e.printStackTrace();
+           
         }  
     }
 

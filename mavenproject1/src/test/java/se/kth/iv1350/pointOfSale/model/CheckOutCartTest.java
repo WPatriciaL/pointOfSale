@@ -2,9 +2,7 @@ package se.kth.iv1350.pointOfSale.model;
 
 import java.util.ArrayList;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import se.kth.iv1350.pointOfSale.integration.CouldNotReachDatabaseException;
@@ -50,7 +48,7 @@ public class CheckOutCartTest {
                     fail("Method did not return the expected exception.");
             } 
                 catch (CouldNotReachDatabaseException couldNotReachDatabaseException) {
-                    couldNotReachDatabaseException.printStackTrace();
+                    
             }
                 catch (Exception exception){
                     fail("Method throw the wrong exception.");
@@ -91,7 +89,7 @@ public class CheckOutCartTest {
         assertNotNull(scannedItem, "failed to return data in return object"); 
         
         } catch (ItemNotFoundException e) {
-            e.printStackTrace();
+            
         }
        
     }
@@ -109,7 +107,7 @@ public class CheckOutCartTest {
         assertTrue(receivedRateOfVAT == 0.25 || receivedRateOfVAT == 0.12 || receivedRateOfVAT == 0.06  ,"Method return invalid VAT-Rate");
        
         } catch (ItemNotFoundException e) {
-            e.printStackTrace();
+           
         }
         
         

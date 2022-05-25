@@ -29,11 +29,13 @@ public class View {
          * hardcoded execution with calls to all system operations in the <code>Controller</code>.
          */
         public void viewExecute(){
-            ItemDTO firstItemBought = new ItemDTO(3, 1, null, null, 0, 0);
-            ItemDTO secondItemBought = new ItemDTO(4, 1, null, null, 0, 0);
+            ItemDTO firstItemBought = new ItemDTO(4, 1, null, null, 0, 0);
+            ItemDTO secondItemBought = new ItemDTO(3, 1, null, null, 0, 0);
+            ItemDTO itemIdOutOfRange = new ItemDTO(8, 1, null, null, 0, 0);
             ItemDTO forbiddenItemIdentifier = new ItemDTO(404, 1, null, null, 0, 0);
             SaleStateDTO firstItemToPrint;
             SaleStateDTO secondItemToPrint;
+            SaleStateDTO thirdItemToPrint;
             SaleStateDTO itemThatCausesAnException;
             ReceiptDTO receipt;
             double paymentReceived = 200;
@@ -44,34 +46,45 @@ public class View {
             try {
                 firstItemToPrint = controller.nextItem(firstItemBought);
                 printSaleInfoToScreen(firstItemToPrint);
+                
                 secondItemToPrint = controller.nextItem(secondItemBought);
                 printSaleInfoToScreen(secondItemToPrint);
-                receipt = controller.concludeSale(paymentReceived);
-                printReceiptToScreen(receipt);     
-            } 
-            catch (InvalidInputException | ConnectionException e) {
-                String messageToScreen = e.getMessage();
-                printExceptionMessageToScreen(messageToScreen);
                 
-                //Throwable originalExceptionMessage = e.getCause();
-                //System.out.println(originalExceptionMessage);   
+                thirdItemToPrint = controller.nextItem(itemIdOutOfRange);
+                printSaleInfoToScreen(thirdItemToPrint);
             }
+             catch (InvalidInputException invalidInputException) {
+                String messageToScreen = "ERROR: You've entered something wrong. Please try again. ";
+                printExceptionMessageToScreen(messageToScreen);     
+           }
+            catch (ConnectionException connectionException){
+                String messageToScreen = "ERROR: Something went wrong with the connection. Please try again.";
+                printExceptionMessageToScreen(messageToScreen); 
+            }
+            
+             receipt = controller.concludeSale(paymentReceived);
+             printReceiptToScreen(receipt);     
+             
                
             controller.startNewSale();
             try {
+                firstItemToPrint = controller.nextItem(firstItemBought);
+                printSaleInfoToScreen(firstItemToPrint);
+                
                 itemThatCausesAnException = controller.nextItem(forbiddenItemIdentifier);
-                printSaleInfoToScreen(itemThatCausesAnException);
-                receipt = controller.concludeSale(paymentReceived);
-                printReceiptToScreen(receipt);
-                
+                printSaleInfoToScreen(itemThatCausesAnException);      
             } 
-            catch (InvalidInputException | ConnectionException e) {
-                String messageToScreen = e.getMessage();
-                printExceptionMessageToScreen(messageToScreen);
-                
-                //Throwable originalExceptionMessage = e.getCause();
-                //System.out.println(originalExceptionMessage);
+            catch (InvalidInputException invalidInputException) {
+                String messageToScreen = "ERROR: You've entered something wrong. Please try again.";
+                printExceptionMessageToScreen(messageToScreen);     
            }
+            catch (ConnectionException connectionException){
+                String messageToScreen = "ERROR: Something went wrong with the connection. Please try again.";
+                printExceptionMessageToScreen(messageToScreen); 
+            }
+            
+            receipt = controller.concludeSale(paymentReceived);
+            printReceiptToScreen(receipt);
         }
         
         
@@ -81,7 +94,7 @@ public class View {
                 System.out.println("|----------------- END OF ERROR MESSAGE ----------------------------|\n \n");
         }
         private void printSaleInfoToScreen (SaleStateDTO toBePrinted){
-        System.out.println("\n Lates scanned item: " + toBePrinted.getScannedITemDTO().getName() + 
+        System.out.println("\n + Lates scanned item: " + toBePrinted.getScannedITemDTO().getName() + 
                 "\n Description: " + toBePrinted.getScannedITemDTO().getDescription() + "\n Price: " + toBePrinted.getScannedITemDTO().getPrice() +
                 "\n Total VAT:" + toBePrinted.getTotalVAT() +"\n Running total: " + toBePrinted.getRunningTotal());
         }

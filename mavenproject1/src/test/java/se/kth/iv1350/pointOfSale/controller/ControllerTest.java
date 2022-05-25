@@ -109,10 +109,9 @@ public class ControllerTest {
                 fail("Function did not return an expected exception.");
                 
             } catch (InvalidInputException invalidInputException) {
-               invalidInputException.printStackTrace();
+               
             }
             catch (Exception exception){
-                
                 fail("Method throw the wrong exception.");
             }
 }

@@ -1,5 +1,6 @@
 package se.kth.iv1350.pointOfSale.model;
 
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
@@ -9,7 +10,7 @@ import java.util.ArrayList;
  */
 public class ReceiptDTO {
 
-	private final LocalDateTime timeForSale;
+	private final String timeForSale;
         private final ArrayList<Item> listOfBoughtItems;
         private final double totalPrice;
         private final double totalVAT;
@@ -25,7 +26,7 @@ public class ReceiptDTO {
          */
 	public ReceiptDTO(SaleStateDTO saleStateDTO,PaymentInfoDTO paymentInfoDTO) {
             
-            this.timeForSale = LocalDateTime.now();
+            this.timeForSale = timeForSale();
             this.listOfBoughtItems = saleStateDTO.getListOfItems();
             this.totalPrice = saleStateDTO.getRunningTotal();
             this.totalVAT = saleStateDTO.getTotalVAT();
@@ -34,6 +35,12 @@ public class ReceiptDTO {
             this.discount = 0;
 	
 	}
+        private String timeForSale(){
+            LocalDateTime ldt = LocalDateTime.now();
+            String str = ldt.getYear()+"-"+ldt.getMonthValue()+ "-" +ldt.getDayOfMonth()+ "   " + ldt.getHour() + ":" + ldt.getMinute();
+            return str;
+       
+        }
     /**
     * Get the <code>change</code> in the concluded <code>Sale</code>.
     * @return amount of change
@@ -70,7 +77,7 @@ public class ReceiptDTO {
      * Get the date and time for the concluded <code>Sale</code>
      * @return date and time
      */
-    public LocalDateTime getTimeForSale() {
+    public String getTimeForSale() {
         return timeForSale;
     }
 
